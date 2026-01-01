@@ -1,0 +1,21 @@
+Instance: customers_10_vrptw
+Number of routes: 4
+Total distance: 3675.68
+Feasible: True
+
+Route 1: 0 -> 3 -> 1 -> 6 -> 0
+  Distance: 852.62
+  Customers: 3
+
+Route 2: 0 -> 4 -> 2 -> 5 -> 0
+  Distance: 1148.07
+  Customers: 3
+
+Route 3: 0 -> 7 -> 9 -> 10 -> 0
+  Distance: 1012.92
+  Customers: 3
+
+Route 4: 0 -> 8 -> 0
+  Distance: 662.07
+  Customers: 1
+

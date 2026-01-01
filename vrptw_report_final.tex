@@ -1,0 +1,150 @@
+\documentclass[12pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{setspace}
+\usepackage{amsmath, amssymb}
+\usepackage{lmodern}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{pgfgantt}
+
+% --- Academic reporting utilities ---
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{siunitx}
+\usepackage{pgfplotstable}
+
+% --- FIX: remove red hyperlink boxes around equation/section/citation numbers ---
+\usepackage[hidelinks]{hyperref}
+
+\setstretch{1.2}
+
+% IMPORTANT: avoid draft placeholders (boxes with filenames)
+\setkeys{Gin}{draft=false}
+
+\sisetup{round-mode=places,round-precision=2}
+
+\pgfplotstableset{
+  col sep=comma,
+  every head row/.style={before row=\toprule,after row=\midrule},
+  every last row/.style={after row=\bottomrule}
+}
+
+% -----------------------------------------------------
+% TITLE
+% -----------------------------------------------------
+\title{
+\Large Time-Windowed Vehicle Routing Without Capacity Constraints:\\
+A Dual-Pipeline Heuristic Framework
+}
+\author{\large Mert Karaaslan \\ Department of Industrial Engineering \\ Hacettepe University}
+\date{November, 2025}
+
+\begin{document}
+
+\maketitle
+
+% -----------------------------------------------------
+% ABSTRACT
+% -----------------------------------------------------
+\begin{abstract}
+This paper considers a variant of the Vehicle Routing Problem with Time Windows (VRPTW) in which vehicle capacity constraints are intentionally omitted in order to isolate time-related effects. Classical VRPTW models are primarily designed for freight settings where vehicle load limits are critical. By contrast, many contemporary service environments---such as field maintenance, technical support, or modular delivery systems---can flexibly adjust capacity, making temporal feasibility the main planning concern.
+
+We develop a heuristic framework for this \emph{capacity-free} VRPTW that combines two classical construction heuristics, Nearest Neighbor and Clarke--Wright Savings, with a common sequence of local search operators (2-opt and relocation). The framework is organized as a dual-pipeline architecture: each pipeline constructs an initial solution using a different heuristic and then applies the same improvement procedures, after which the better solution is selected. This design enables a structured comparison of construction strategies under identical local search conditions and provides a clean setting for analyzing how time-window interactions alone shape route structure. The proposed methodology is intended as a baseline heuristic framework for time-dominant routing problems and as a starting point for future empirical studies in capacity-free VRPTW.
+\end{abstract}
+
+\noindent\textbf{Keywords:} Vehicle Routing Problem, Time Windows, Heuristics, Local Search, Nearest Neighbor, Clarke--Wright, Temporal Optimization, Service Operations.
+
+% -----------------------------------------------------
+% SECTION 1: INTRODUCTION  (KEPT VERBATIM / NOT SHORTENED)
+% -----------------------------------------------------
+\section{Introduction}
+
+\subsection{Background and Motivation}
+
+The Vehicle Routing Problem (VRP) is a central topic in operations research and combinatorial optimization, addressing the design of efficient routes from a depot to a set of geographically distributed customers. Since the seminal study of Dantzig and Ramser (1959), the VRP family has expanded to include many practical features, such as capacity limitations, time windows, multiple depots, pickup-and-delivery requirements, and periodic planning structures. Within this family, the Vehicle Routing Problem with Time Windows (VRPTW) is particularly relevant for modern service and distribution systems, where satisfying customer-specific service intervals is as important as minimizing travel distance. In VRPTW, each customer must be served within a specified time window $[a_i, b_i]$, which constrains feasible visit sequences and introduces substantial temporal complexity. The problem is NP-hard, and time windows make the problem even harder by restricting admissible service orders.
+
+Most classical VRPTW formulations assume fixed and binding vehicle capacities. This assumption is appropriate for freight-oriented operations, such as bulk distribution or fuel transportation, where load feasibility strongly drives route design. However, many contemporary service and urban logistics applications exhibit flexible or dynamically adjustable capacity. Examples include field-service teams, on-demand maintenance crews, medical response units, and modular delivery systems, where vehicle size or the number of service teams can be chosen after routes are planned or adjusted in response to workload. In such environments, route feasibility is driven less by vehicle load and more by the interplay of time-window adherence, service durations, and travel times.
+
+Motivated by these applications, this study focuses on a \emph{capacity-free} variant of VRPTW. Load constraints are removed explicitly so that the core temporal optimization problem can be examined in isolation: sequences of customers must be chosen such that all time windows are satisfied and total travel distance (or time) is minimized. This perspective serves two main purposes. First, it clarifies how time-window constraints alone shape route structure, including the propagation of early or late arrivals, the role of waiting at customer locations, and the effect of depot opening and closing times on downstream feasibility and cost. Second, by abstracting away capacity checks, it enables the design and analysis of time-window--aware constructive heuristics and local search operators without the confounding influence of load feasibility.
+
+We adopt a single-depot setting for clarity and ease of interpretation. Compared to multi-depot scenarios, a single depot yields a simpler geographic structure while still capturing the essential temporal interactions of interest. Typical assumptions---such as depot operating hours (e.g., 08:00--17:00), fixed service times (e.g., 60 minutes per customer), and Euclidean travel distances---provide a controlled yet practically meaningful environment in which to study time-window propagation.
+
+Eliminating capacity might at first suggest a simpler problem. However, it is well known that time-window constraints by themselves can induce substantial combinatorial difficulty. Tight or overlapping windows may restrict routes to narrow feasible sequences, and the interaction between waiting, early arrival, and on-time service can influence cost at least as strongly as distance. These dynamics significantly affect the behavior of constructive heuristics and local search moves. For this reason, our approach emphasizes time-window--aware construction strategies, local improvement operators such as 2-opt exchanges and customer relocations coupled with forward time propagation, and a framework that systematically examines heuristic behavior under capacity-free conditions.
+
+Although VRPTW has been studied for several decades, most methods are designed around load feasibility, and algorithmic operators, repair mechanisms, and neighborhood structures are often capacity-driven. As a result, there is comparatively little work that explicitly treats ``capacity-free VRPTW'' as a simplified test bed where time-window effects are studied in isolation. Providing such a clean, heuristic framework is the main methodological motivation of this project.
+
+\subsection{Literature Review}
+
+Research on VRPTW has progressed substantially since Solomon (1987), whose benchmark instances and problem formulation continue to shape the field. Solomon's work introduced structured datasets that systematically vary geographic dispersion and time-window tightness, and it provided baseline heuristics that formed the starting point for many later methods. Bräysy and Gendreau (2005) offered an influential survey that organized VRPTW algorithms into constructive heuristics, local search, and metaheuristic frameworks, highlighting both algorithmic diversity and the importance of hybridization.
+
+Classical heuristic approaches remain fundamental. The Clarke--Wright Savings algorithm, originally proposed for the capacitated VRP, has been adapted to account for time windows by incorporating temporal feasibility checks (Clarke and Wright, 1964). Nearest Neighbor heuristics, although simple, provide quick baseline solutions and are widely used as initialization procedures for more advanced algorithms (Solomon, 1987). Local search techniques, especially 2-opt and relocation operators, have been shown to be essential for improving these initial solutions (Lin, 1965; Or, 1976).
+
+In recent decades, research has shifted toward more sophisticated hybrid methods that combine multiple optimization paradigms. Vidal et al.\ (2013) developed unified hybrid genetic algorithms that integrate evolutionary strategies with adaptive memory components. The Adaptive Large Neighborhood Search (ALNS) framework introduced by Ropke and Pisinger (2006) has become a dominant approach for large-scale VRPTW, using multiple removal and insertion heuristics together with metaheuristic control. These advanced methods are typically built for capacitated settings and include specialized mechanisms for handling load feasibility.
+
+Despite the breadth of VRPTW research, almost all published work includes explicit vehicle capacity constraints. This emphasis reflects traditional logistics applications such as bulk transport, fuel distribution, and grocery delivery, where vehicle loading is inseparable from operational planning. As a result, algorithmic development has focused heavily on capacity-driven feasibility checks, load consolidation strategies, and capacity-aware neighborhood structures (Cordeau et al., 2002).
+
+By comparison, studies in which temporal feasibility is the only structural constraint are relatively sparse. Some related work examines technician routing, time-windowed arc routing, or other problems where timing is central, but these formulations differ in structure from the node-based VRPTW considered here and do not provide a direct analysis of capacity-free routing. Hence, understanding how classical heuristics behave when capacity is deliberately removed, and time windows become the only binding constraint, remains an interesting methodological question that motivates the framework proposed in this project.
+
+\subsection{Project Aim}
+
+The primary aim of this project is to design and implement a dual-pipeline heuristic framework for the capacity-free VRPTW that:
+\begin{itemize}
+    \item isolates the effects of time-window constraints on route structure, feasibility, and waiting behavior;
+    \item compares the behavior of two classical construction heuristics (Nearest Neighbor and Clarke--Wright Savings) under an identical local search scheme; and
+    \item establishes a clear, reproducible baseline that can be reused and extended in later computational studies (for example, by reintroducing capacity constraints or embedding the heuristics into metaheuristic frameworks).
+\end{itemize}
+
+\subsection{Research Questions}
+
+To structure the analysis, we consider the following research questions:
+\begin{itemize}
+    \item How do time windows alone influence feasible service sequences, waiting behavior, and the number of routes when capacity constraints are absent?
+    \item How do classical heuristics behave in capacity-free VRPTW compared to their traditional use in capacitated settings?
+    \item Which local search operators contribute most to solution improvement in time-dominant routing scenarios, and how do they interact with different construction strategies?
+    \item What is the relative importance of initial solution quality versus local search effectiveness for the final outcomes in capacity-free VRPTW?
+\end{itemize}
+
+\subsection{Problem Definition}
+
+We study a single-depot VRPTW variant in which vehicle load limits are not considered. The task is to construct a set of routes originating from and returning to the depot such that each customer is visited exactly once, service at each customer begins within its allowed time window, and total travel distance is minimized. Because capacity does not restrict the number of customers per route, multiple vehicles (or routes) may still be required purely for temporal reasons. In this setting, the structure of the solution is driven entirely by the interaction of time windows, service durations, travel times, and depot operating hours.
+
+% -----------------------------------------------------
+% SECTION 2: PROBLEM STATEMENT + MODEL  (KEPT VERBATIM / NOT SHORTENED)
+% -----------------------------------------------------
+\section{Problem Statement and Mathematical Model}
+
+\subsection{Problem Statement}
+
+We consider a homogeneous fleet of $m$ vehicles operating from a single depot denoted by node $0$. Each customer in the set $V' = \{1,\dots,n\}$ must be visited exactly once, and service at each customer must start within a specified time window. Vehicle capacity is intentionally ignored; as a consequence, the number of routes required in a feasible solution is determined solely by temporal constraints.
+
+Let $V = \{0,1,\ldots,n\}$ denote the set of all nodes (depot and customers), and $V' = V \setminus \{0\}$ the set of customer nodes. Let $K = \{1,\ldots,m\}$ denote the set of vehicles; in the mathematical model, $m$ is interpreted as an upper bound on the number of vehicles, while in the heuristic implementation the number of constructed routes can be viewed as the number of vehicles actually used. For each pair of nodes $i,j \in V$, $d_{ij}$ and $t_{ij}$ denote the distance and travel time between $i$ and $j$. Each customer $i \in V'$ has an associated time window $[a_i,b_i]$ and service time $s_i$. The depot has its own opening and closing times $[a_0,b_0]$ and we assume $s_0 = 0$.
+
+Decision variables include $x_{ij}^k$, which equals 1 if vehicle $k$ directly travels from node $i$ to node $j$, and $w_i$, which denotes the service start time at node $i$.
+
+\subsection{Mathematical Model}
+
+\begin{align}
+    \min \quad & \sum_{k \in K} \sum_{i \in V} \sum_{j \in V} d_{ij} \, x_{ij}^k \label{obj} \\
+    \text{s.t.} \quad
+    & \sum_{k \in K} \sum_{i \in V} x_{ij}^k = 1, && \forall j \in V' \label{assign} \\
+    & \sum_{i \in V} x_{ip}^k = \sum_{j \in V} x_{pj}^k, && \forall p \in V',\ \forall k \in K \label{flow} \\
+    & w_i + s_i + t_{ij} \le w_j + M(1 - x_{ij}^k), && \forall i, j \in V,\ \forall k \in K \label{temporal} \\
+    & a_i \le w_i \le b_i, && \forall i \in V \label{tw} \\
+    & \sum_{i \in V} x_{i0}^k \le 1, && \forall k \in K \label{return}
+\end{align}
+
+\subsection*{Interpretation and Modelling Remarks}
+
+Constraint~\eqref{obj} minimizes total travel distance. Constraint~\eqref{assign} ensures that each customer is served exactly once. Constraint~\eqref{flow} enforces flow conservation for each vehicle, so that whenever a vehicle arrives at a customer it must also depart. Constraint~\eqref{temporal} propagates service start times along used arcs and ensures that travel and service durations are consistent with the schedule. Constraint~\eqref{tw} guarantees that service at each node (including the depot) starts within the allowed time window. Constraint~\eqref{return} limits each vehicle to at most one return to the depot.
+
+In a full mixed-integer programming formulation of VRPTW, additional constraints are typically introduced to prevent subtours and to model depot departures explicitly. In the present study, routes are generated heuristically starting from the depot and are always constructed as depot-to-depot paths. For this reason, subtour elimination constraints are not listed explicitly; instead, they are implicitly enforced by the structure of the heuristic algorithms.
+
+% CONTINUED IN NEXT FILE DUE TO LENGTH...
+\end{document}

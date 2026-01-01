@@ -1,0 +1,16 @@
+instance,run_idx,seed,CW_improved,CW_initial,Dual_final,NN_improved,NN_initial
+customers_10_vrptw_hetero_tw,0,42,4,4,4,4,6
+customers_10_vrptw_hetero_tw,1,43,4,4,4,4,5
+customers_10_vrptw_hetero_tw,2,44,4,4,4,4,6
+customers_10_vrptw_hetero_tw,3,45,4,4,4,4,5
+customers_10_vrptw_hetero_tw,4,46,4,4,4,4,5
+customers_20_vrptw_hetero_tw,0,42,6,7,6,6,8
+customers_20_vrptw_hetero_tw,1,43,6,7,6,6,8
+customers_20_vrptw_hetero_tw,2,44,6,7,6,6,9
+customers_20_vrptw_hetero_tw,3,45,6,7,6,6,8
+customers_20_vrptw_hetero_tw,4,46,6,7,6,6,7
+customers_20_vrptw_hetero_tw,5,47,6,7,6,7,8
+customers_20_vrptw_hetero_tw,6,48,6,7,6,6,9
+customers_20_vrptw_hetero_tw,7,49,6,7,6,6,9
+customers_20_vrptw_hetero_tw,8,50,6,7,6,6,8
+customers_20_vrptw_hetero_tw,9,51,6,7,6,6,9
