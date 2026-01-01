@@ -49,6 +49,9 @@ We develop a heuristic framework for this \emph{capacity-free} VRPTW that combin
 
 \noindent\textbf{Keywords:} Vehicle Routing Problem, Time Windows, Heuristics, Local Search, Nearest Neighbor, Clarke--Wright, Temporal Optimization, Service Operations.
 
+\vspace{0.3cm}
+\noindent\textbf{Code Availability:} The complete implementation of the proposed framework, including all algorithms, experimental scripts, and datasets, is publicly available on GitHub: \url{https://github.com/mkaraaslan99/capacity-free-vrptw}. Detailed instructions for running the code and reproducing the experimental results are provided in the \texttt{HOWTORUN.txt} file in the repository.
+
 \section{Introduction}
 
 \subsection{Background and Motivation}
@@ -470,6 +473,9 @@ For each solution, we record the following metrics:
 
 Results are reported as mean $\pm$ standard deviation across the 10 runs for each instance and configuration.
 
+\paragraph{Code and data availability.}
+All source code, datasets, and experimental scripts used in this study are publicly available in the GitHub repository: \url{https://github.com/mkaraaslan99/capacity-free-vrptw}. The repository includes detailed documentation (\texttt{README.md}, \texttt{QUICKSTART.md}, \texttt{HOWTORUN.txt}) with step-by-step instructions for installation, usage, and reproduction of all experimental results. The main execution script is \texttt{main\_capacity\_free\_vrptw.py}, and the complete experimental pipeline can be reproduced using \texttt{run\_all\_reports.py}.
+
 \section{Results}
 
 \subsection{Overview of Experimental Results}
@@ -852,5 +858,24 @@ The Weighted-NN results highlight the importance of parameter calibration for ur
 This study has demonstrated that the capacity-free VRPTW provides a valuable test bed for studying how time-window constraints alone shape routing decisions. The dual-pipeline heuristic framework combines classical construction heuristics with modern local search techniques to achieve good solution quality with modest computational effort. The framework's simplicity, interpretability, and extensibility make it a useful baseline for future research and a practical tool for real-world service routing applications where temporal feasibility is the primary constraint.
 
 The success of the framework validates several key design principles: (1) combining complementary construction strategies through algorithm portfolios improves robustness; (2) feasibility-preserving local search provides consistent improvements without requiring complex repair mechanisms; and (3) controlled randomness enables meaningful statistical analysis of heuristic stability. These principles are broadly applicable to other routing problems and combinatorial optimization domains, suggesting that the methodological insights from this study extend beyond the specific context of capacity-free VRPTW.
+
+\subsection{Code and Reproducibility}
+
+To support reproducibility and facilitate future research, the complete implementation is publicly available on GitHub:
+
+\begin{center}
+\url{https://github.com/mkaraaslan99/capacity-free-vrptw}
+\end{center}
+
+The repository includes:
+\begin{itemize}
+    \item All Python source code for construction heuristics, local search operators, and the dual-pipeline framework
+    \item Solomon C1-based datasets with homogeneous and heterogeneous time-window configurations
+    \item Experimental scripts for generating all tables and figures presented in this paper
+    \item Comprehensive documentation including installation instructions, usage examples, and API reference
+    \item Detailed execution guide (\texttt{HOWTORUN.txt}) with step-by-step instructions for reproducing all results
+\end{itemize}
+
+The code is written in Python 3.8+ and requires only standard scientific computing libraries (NumPy, Pandas, Matplotlib). All experiments can be reproduced by running \texttt{python run\_all\_reports.py}, which generates the complete set of experimental results in approximately 10--15 minutes on standard hardware.
 
 \end{document}

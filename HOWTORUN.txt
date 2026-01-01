@@ -1,0 +1,261 @@
+================================================================================
+CAPACITY-FREE VRPTW: DUAL-PIPELINE HEURISTIC FRAMEWORK
+HOW TO RUN THE CODE AND DATA EXAMPLES
+================================================================================
+
+Project: Time-Windowed Vehicle Routing Without Capacity Constraints
+Author: Mert Karaaslan
+Institution: Hacettepe University, Department of Industrial Engineering
+GitHub: https://github.com/mkaraaslan99/capacity-free-vrptw
+
+================================================================================
+SYSTEM REQUIREMENTS
+================================================================================
+
+- Python 3.8 or higher
+- Operating System: Windows, macOS, or Linux
+- Memory: At least 4 GB RAM
+- Disk Space: At least 100 MB free space
+
+================================================================================
+INSTALLATION
+================================================================================
+
+1. Clone the repository from GitHub:
+   
+   git clone https://github.com/mkaraaslan99/capacity-free-vrptw.git
+   cd capacity-free-vrptw
+
+2. Install required Python packages:
+   
+   pip install -r requirements.txt
+
+   Required packages:
+   - numpy >= 1.24.0
+   - matplotlib >= 3.7.0
+   - pandas >= 2.0.0
+   - seaborn >= 0.12.0
+   - scipy >= 1.10.0
+   - tqdm >= 4.65.0
+
+================================================================================
+DATA FILES
+================================================================================
+
+Sample datasets are provided in the 'data/' directory:
+
+- data/customers_10_vrptw.csv              (10 customers, homogeneous TW)
+- data/customers_20_vrptw.csv              (20 customers, homogeneous TW)
+- data/customers_10_vrptw_hetero_tw.csv    (10 customers, heterogeneous TW)
+- data/customers_20_vrptw_hetero_tw.csv    (20 customers, heterogeneous TW)
+- data/sample_customers.csv                (Sample dataset for testing)
+
+CSV Format:
+customer_id, x_coord, y_coord, demand, ready_time, due_time, service_time
+
+================================================================================
+BASIC USAGE EXAMPLES
+================================================================================
+
+1. RUN CAPACITY-FREE VRPTW WITH DEFAULT SETTINGS (Nearest Neighbor):
+
+   python main_capacity_free_vrptw.py --customers data/customers_10_vrptw.csv
+
+   Output: Solution routes, total cost, number of vehicles, runtime
+
+
+2. RUN WITH CLARKE-WRIGHT HEURISTIC:
+
+   python main_capacity_free_vrptw.py --customers data/customers_10_vrptw.csv \
+       --algorithm cw
+
+   Output: CW-based solution with feasibility checking
+
+
+3. RUN DUAL-PIPELINE FRAMEWORK (NN + CW with Local Search):
+
+   python main_capacity_free_vrptw.py --customers data/customers_10_vrptw.csv \
+       --algorithm dual
+
+   Output: Best solution from both pipelines with improvement stages
+
+
+4. RUN WITH WEIGHTED-NN (URGENCY-AWARE):
+
+   python main_capacity_free_vrptw.py --customers data/customers_20_vrptw_hetero_tw.csv \
+       --algorithm dual --urgency-weight 0.5
+
+   Output: Solution considering time-window urgency
+
+
+5. RUN WITH CUSTOM OUTPUT DIRECTORY:
+
+   python main_capacity_free_vrptw.py --customers data/customers_10_vrptw.csv \
+       --algorithm dual --output-dir my_results
+
+   Output: Results saved in 'my_results/' directory
+
+================================================================================
+ADVANCED USAGE
+================================================================================
+
+1. GENERATE ALL EXPERIMENTAL RESULTS (Used in Research Paper):
+
+   python run_all_reports.py
+
+   This script:
+   - Generates heterogeneous time-window datasets
+   - Runs baseline experiments (homogeneous TW)
+   - Runs heterogeneous experiments
+   - Runs Weighted-NN experiments
+   - Creates all tables and figures in 'report_outputs/'
+   - Takes approximately 10-15 minutes to complete
+
+
+2. RUN CONSISTENCY ANALYSIS (Multiple Runs with Different Seeds):
+
+   python consistency_runs.py --customers data/customers_10_vrptw.csv \
+       --repeats 10
+
+   Output: Statistical analysis across multiple runs
+
+
+3. GENERATE DETAILED STAGE-BY-STAGE REPORTS:
+
+   python detailed_runs_report.py \
+       --case data/customers_10_vrptw.csv:10 \
+       --case data/customers_20_vrptw.csv:10
+
+   Output: Per-run and summary statistics in CSV format
+
+
+4. CREATE VISUALIZATION FIGURES:
+
+   python plot_detailed_runs_figures.py
+
+   Output: Cost distributions, runtime analysis, route count plots
+
+================================================================================
+UNDERSTANDING THE OUTPUT
+================================================================================
+
+Console Output:
+- Total Travel Cost: Sum of Euclidean distances
+- Number of Routes: Number of vehicles used
+- Feasibility: Whether all time-window constraints are satisfied
+- Runtime: Computational time in seconds
+
+File Outputs:
+- results/: Route visualizations (PNG files)
+- report_outputs/: Experimental tables and figures (CSV, PNG)
+- CSV files contain detailed metrics for each algorithm stage
+
+================================================================================
+ALGORITHM OPTIONS
+================================================================================
+
+Available algorithms (--algorithm flag):
+- nn: Nearest Neighbor construction only
+- cw: Clarke-Wright Savings construction only
+- dual: Dual-pipeline (NN + CW) with local search (RECOMMENDED)
+
+Construction variants:
+- --nn-variant: sequential (default) or parallel
+- --cw-variant: standard (default) or parallel
+
+Local search options:
+- 2-opt: Intra-route edge reversal (always enabled in dual mode)
+- relocation: Inter/intra-route customer moves (always enabled in dual mode)
+
+Urgency-aware construction:
+- --urgency-weight: Weight for time-window slack term (0.0 = baseline, 0.5 = recommended)
+
+================================================================================
+REPRODUCING PAPER RESULTS
+================================================================================
+
+To reproduce the exact results from the research paper:
+
+1. Generate all datasets and run experiments:
+   
+   python run_all_reports.py
+
+2. Results will be saved in:
+   - report_outputs/vrptw_detailed_runs.csv (homogeneous baseline)
+   - report_outputs/vrptw_detailed_runs_hetero_baseline.csv (heterogeneous)
+   - report_outputs/vrptw_detailed_runs_hetero_weightedNN_u2.csv (Weighted-NN)
+   - report_outputs/figures/ (visualization plots)
+   - report_outputs/tables/ (summary statistics)
+
+3. Compile the LaTeX report:
+   
+   pdflatex vrptw_complete_report.tex
+   pdflatex vrptw_complete_report.tex
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Problem: "ModuleNotFoundError: No module named 'numpy'"
+Solution: Install dependencies with: pip install -r requirements.txt
+
+Problem: "FileNotFoundError: data/customers_10_vrptw.csv"
+Solution: Ensure you are in the project root directory
+
+Problem: "No feasible solution found"
+Solution: Check time-window constraints in input CSV file
+
+Problem: Slow performance on large instances
+Solution: Use smaller datasets (10-20 customers) or enable parallel variants
+
+================================================================================
+EXAMPLE WORKFLOW
+================================================================================
+
+Step 1: Test with small sample
+   python main_capacity_free_vrptw.py --customers data/sample_customers.csv
+
+Step 2: Run dual-pipeline on 10-customer instance
+   python main_capacity_free_vrptw.py --customers data/customers_10_vrptw.csv \
+       --algorithm dual
+
+Step 3: Compare with heterogeneous time windows
+   python main_capacity_free_vrptw.py \
+       --customers data/customers_10_vrptw_hetero_tw.csv --algorithm dual
+
+Step 4: Generate full experimental results
+   python run_all_reports.py
+
+Step 5: View results in report_outputs/ directory
+
+================================================================================
+CONTACT AND SUPPORT
+================================================================================
+
+For questions, issues, or contributions:
+- GitHub Issues: https://github.com/mkaraaslan99/capacity-free-vrptw/issues
+- Email: Contact via GitHub profile
+
+Project Documentation:
+- README.md: Project overview and quick start
+- QUICKSTART.md: Detailed usage guide
+- PROJECT_SUMMARY.md: Technical implementation details
+- vrptw_complete_report.tex: Full research paper
+
+================================================================================
+LICENSE AND CITATION
+================================================================================
+
+This project is available for academic and educational purposes.
+
+If you use this code in your research, please cite:
+
+Karaaslan, M. (2025). Time-Windowed Vehicle Routing Without Capacity 
+Constraints: A Dual-Pipeline Heuristic Framework. MSc Project Report, 
+Hacettepe University, Department of Industrial Engineering.
+
+GitHub Repository: https://github.com/mkaraaslan99/capacity-free-vrptw
+
+================================================================================
+END OF INSTRUCTIONS
+================================================================================
