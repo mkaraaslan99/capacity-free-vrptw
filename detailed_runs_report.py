@@ -28,6 +28,7 @@ from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
 import random
+import pandas as pd
 
 from problems.vrptw import VRPTWInstance
 from heuristics.vrptw_nearest_neighbor import nearest_neighbor_vrptw
