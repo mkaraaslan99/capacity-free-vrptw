@@ -147,6 +147,20 @@ To structure the analysis, we consider the following research questions:
 
 We study a single-depot VRPTW variant in which vehicle load limits are not considered. The task is to construct a set of routes originating from and returning to the depot such that each customer is visited exactly once, service at each customer begins within its allowed time window, and total travel distance is minimized. Because capacity does not restrict the number of customers per route, multiple vehicles (or routes) may still be required purely for temporal reasons. In this setting, the structure of the solution is driven entirely by the interaction of time windows, service durations, travel times, and depot operating hours.
 
+\subsection{Organization of the Report}
+
+The remainder of this report is organized as follows:
+
+\textbf{Section 2} presents the formal problem statement and mathematical model for the capacity-free VRPTW, defining decision variables, objective function, and constraints that govern temporal feasibility.
+
+\textbf{Section 3} describes the solution methodology in detail, including the Nearest Neighbor and Clarke--Wright construction heuristics, local search operators (2-opt and relocation), the dual-pipeline framework architecture, and the Weighted-NN variant that incorporates time-window urgency awareness.
+
+\textbf{Section 4} outlines the experimental setup, including dataset generation from Solomon C1 benchmark instances, homogeneous and heterogeneous time-window configurations, experimental parameters, and performance metrics used for evaluation.
+
+\textbf{Section 5} presents the experimental results, organized into comparisons of homogeneous versus heterogeneous time windows, baseline versus Weighted-NN construction, NN versus CW initial solutions, and algorithm stability analysis across multiple runs.
+
+\textbf{Section 6} concludes the report with a discussion of practical implications, limitations, future research directions, and information on code availability and reproducibility.
+
 \section{Problem Statement and Mathematical Model}
 
 \subsection{Problem Statement}
