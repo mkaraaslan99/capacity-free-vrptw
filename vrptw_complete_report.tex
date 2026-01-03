@@ -936,4 +936,66 @@ The repository includes:
 
 The code is written in Python 3.8+ and requires only standard scientific computing libraries (NumPy, Pandas, Matplotlib). All experiments can be reproduced by running \texttt{python run\_all\_reports.py}, which generates the complete set of experimental results in approximately 10--15 minutes on standard hardware.
 
+\appendix
+
+\section{Source Code}
+
+The complete source code for this project is available on GitHub at \url{https://github.com/mkaraaslan99/capacity-free-vrptw}. The main implementation files are listed below:
+
+\subsection{Main Execution Scripts}
+
+\textbf{main\_capacity\_free\_vrptw.py} -- Main driver script for running capacity-free VRPTW experiments with command-line interface for algorithm selection, parameter configuration, and output control.
+
+\textbf{run\_all\_reports.py} -- Orchestrator script that generates all experimental results, including homogeneous and heterogeneous time-window configurations, baseline and Weighted-NN variants, and produces all tables and figures used in this report.
+
+\subsection{Construction Heuristics}
+
+\textbf{heuristics/vrptw\_nearest\_neighbor.py} -- Implementation of Nearest Neighbor construction heuristic with RCL-based randomness and optional urgency-aware Weighted-NN variant.
+
+\textbf{heuristics/vrptw\_savings\_new.py} -- Implementation of Clarke--Wright Savings heuristic with RCL-based route merging and seeded randomness control.
+
+\subsection{Local Search Operators}
+
+\textbf{local\_search/local\_search\_operators.py} -- Implementation of 2-opt intra-route improvement and relocation (inter/intra-route customer moves) with feasibility-preserving time-window checks.
+
+\textbf{local\_search/enhanced\_local\_search.py} -- Enhanced local search framework with iterative improvement and convergence detection.
+
+\subsection{Pipeline Framework}
+
+\textbf{final\_feasible\_pipeline.py} -- Dual-pipeline framework implementation that runs NN and CW construction pipelines in parallel, applies local search to both, and selects the best solution.
+
+\textbf{feasible\_dual\_pipeline.py} -- Extended dual-pipeline with route splitting and maximum duration enforcement capabilities.
+
+\subsection{Problem Definition and Utilities}
+
+\textbf{problems/vrptw.py} -- VRPTW problem class definition with time-window feasibility checking, route evaluation, and solution validation methods.
+
+\textbf{utils/visualization\_new.py} -- Visualization utilities for generating route plots, convergence charts, and algorithm comparison figures.
+
+\subsection{Experimental Analysis Scripts}
+
+\textbf{consistency\_runs.py} -- Script for running multiple independent trials with different random seeds to analyze algorithm stability and variance.
+
+\textbf{detailed\_runs\_report.py} -- Generates detailed stage-by-stage performance reports with per-run and summary statistics in CSV format.
+
+\textbf{export\_report\_tables.py} -- Exports formatted tables from experimental results for inclusion in research reports.
+
+\textbf{plot\_detailed\_runs\_figures.py} -- Creates visualization figures including cost distributions, runtime analysis, and route count plots.
+
+\textbf{generate\_heterogeneous\_tw.py} -- Generates heterogeneous time-window datasets from Solomon C1 instances with varying window widths.
+
+\subsection{Dataset Files}
+
+\textbf{data/customers\_10\_vrptw.csv} -- 10-customer instance with homogeneous time windows
+
+\textbf{data/customers\_20\_vrptw.csv} -- 20-customer instance with homogeneous time windows
+
+\textbf{data/customers\_10\_vrptw\_hetero\_tw.csv} -- 10-customer instance with heterogeneous time windows
+
+\textbf{data/customers\_20\_vrptw\_hetero\_tw.csv} -- 20-customer instance with heterogeneous time windows
+
+\vspace{0.5cm}
+
+\noindent All source files include detailed inline documentation and follow Python PEP 8 style guidelines. For complete implementation details, usage examples, and execution instructions, please refer to the GitHub repository and the \texttt{HOWTORUN.txt} file.
+
 \end{document}
