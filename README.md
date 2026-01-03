@@ -79,6 +79,7 @@ The framework has been tested on Solomon C1 benchmark instances with:
 - **Time-window configurations**: Homogeneous and heterogeneous
 - **Repeated runs**: 10 independent runs per configuration
 - **RCL size**: k=3 for controlled randomness
+- **Output formats**: Results exported in both CSV and Excel (.xlsx) formats
 
 ### Key Findings
 
@@ -86,6 +87,13 @@ The framework has been tested on Solomon C1 benchmark instances with:
 - **Local search is essential**: 5-12% cost reduction
 - **High consistency**: CV values below 4% across all algorithms
 - **Dual-pipeline robustness**: Best stability with 2.32-3.02% CV
+
+### Result Files
+
+All experimental results are available in `report_outputs/` directory:
+- **CSV files**: Raw data and summary statistics
+- **Excel files**: Formatted workbooks with multiple sheets for easy analysis
+- **Combined Excel**: All results in single workbook with organized sheets
 
 ## 📖 Documentation
 

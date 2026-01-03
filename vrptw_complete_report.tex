@@ -976,17 +976,17 @@ The complete source code for this project is available on GitHub at \url{https:/
 
 \textbf{consistency\_runs.py} -- Script for running multiple independent trials with different random seeds to analyze algorithm stability and variance.
 
-\textbf{detailed\_runs\_report.py} -- Generates detailed stage-by-stage performance reports with per-run and summary statistics in CSV format.
+\textbf{detailed\_runs\_report.py} -- Generates detailed stage-by-stage performance reports with per-run and summary statistics. Exports results in both CSV and Excel (.xlsx) formats for easy analysis and visualization.
 
-\textbf{export\_report\_tables.py} -- Exports formatted tables from experimental results for inclusion in research reports. Converts detailed run data into pivoted wide-format tables (per-run cost, per-run routes) and summary statistics tables with mean, standard deviation, min, max values for each algorithm variant and instance.
+\textbf{export\_report\_tables.py} -- Exports formatted tables from experimental results for inclusion in research reports. Converts detailed run data into pivoted wide-format tables (per-run cost, per-run routes) and summary statistics tables with mean, standard deviation, min, max values for each algorithm variant and instance. Generates both individual Excel files and a combined Excel workbook with multiple sheets (Cost\_Per\_Run, Routes\_Per\_Run, Summary\_Stats, Raw\_Data).
 
-\textbf{stage\_by\_stage\_report.py} -- Generates comprehensive stage-by-stage analysis showing algorithm progression through construction, 2-opt, and relocation phases. Exports results to CSV with detailed metrics for each algorithmic stage.
+\textbf{stage\_by\_stage\_report.py} -- Generates comprehensive stage-by-stage analysis showing algorithm progression through construction, 2-opt, and relocation phases. Exports results in both CSV and Excel formats with detailed metrics for each algorithmic stage.
 
-\textbf{plot\_detailed\_runs\_figures.py} -- Creates visualization figures including cost distributions, runtime analysis, and route count plots from CSV experimental results.
+\textbf{plot\_detailed\_runs\_figures.py} -- Creates visualization figures including cost distributions, runtime analysis, and route count plots from experimental results.
 
 \textbf{generate\_heterogeneous\_tw.py} -- Generates heterogeneous time-window datasets from Solomon C1 instances with varying window widths.
 
-\textbf{duration\_sweep.py} -- Performs sensitivity analysis by sweeping maximum route duration parameters and exports results to CSV format for analysis.
+\textbf{duration\_sweep.py} -- Performs sensitivity analysis by sweeping maximum route duration parameters. Exports results in both CSV and Excel formats, including pivot tables and combined workbooks with multiple sheets for comprehensive analysis.
 
 \subsection{Dataset Files}
 

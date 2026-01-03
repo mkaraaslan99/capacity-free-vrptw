@@ -109,6 +109,8 @@ ADVANCED USAGE
    - Runs heterogeneous experiments
    - Runs Weighted-NN experiments
    - Creates all tables and figures in 'report_outputs/'
+   - Exports results in BOTH CSV and Excel (.xlsx) formats
+   - Generates combined Excel workbooks with multiple sheets
    - Takes approximately 10-15 minutes to complete
 
 
@@ -147,8 +149,12 @@ Console Output:
 
 File Outputs:
 - results/: Route visualizations (PNG files)
-- report_outputs/: Experimental tables and figures (CSV, PNG)
+- report_outputs/: Experimental tables and figures (CSV, Excel, PNG)
 - CSV files contain detailed metrics for each algorithm stage
+- Excel (.xlsx) files provide formatted results with multiple sheets:
+  * Individual Excel files for each metric (cost, routes, summary)
+  * Combined Excel workbooks with all data in separate sheets
+  * Easy to open in Microsoft Excel, Apple Numbers, or Google Sheets
 
 ================================================================================
 ALGORITHM OPTIONS
