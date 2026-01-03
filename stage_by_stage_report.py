@@ -123,9 +123,16 @@ def run_stage_by_stage(customers_file: str, travel_speed: float, out_root: Path,
     _run_and_record_stage(vrptw, dataset_label, "CW", "After_relocation", deepcopy(cw_after_reloc), cw_cost_reloc, t_reloc, out_dir, records)
 
     df = pd.DataFrame(records)
+    
+    # Save CSV
     csv_path = out_dir / "stage_by_stage_summary.csv"
     df.to_csv(csv_path, index=False)
     print(f"\nSaved stage-by-stage table to: {csv_path}")
+    
+    # Save Excel
+    excel_path = out_dir / "stage_by_stage_summary.xlsx"
+    df.to_excel(excel_path, index=False, sheet_name='Stage_by_Stage')
+    print(f"Saved stage-by-stage table to: {excel_path}")
 
 
 def main() -> None:

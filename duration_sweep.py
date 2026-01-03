@@ -88,6 +88,8 @@ def main():
                 )
 
     df = pd.DataFrame(records)
+    
+    # Save CSV files
     csv_path = out_dir / "duration_sweep.csv"
     df.to_csv(csv_path, index=False)
 
@@ -101,8 +103,25 @@ def main():
     pivot_path = out_dir / "duration_sweep_cost_pivot.csv"
     pivot.to_csv(pivot_path, index=False)
 
-    print(f"Saved: {csv_path}")
-    print(f"Saved: {pivot_path}")
+    print(f"Saved CSV: {csv_path}")
+    print(f"Saved CSV: {pivot_path}")
+    
+    # Save Excel files
+    excel_path = out_dir / "duration_sweep.xlsx"
+    df.to_excel(excel_path, index=False, sheet_name='Duration_Sweep')
+    
+    pivot_excel_path = out_dir / "duration_sweep_cost_pivot.xlsx"
+    pivot.to_excel(pivot_excel_path, index=False, sheet_name='Cost_Pivot')
+    
+    # Combined Excel with multiple sheets
+    excel_combined = out_dir / "duration_sweep_all.xlsx"
+    with pd.ExcelWriter(excel_combined, engine='openpyxl') as writer:
+        df.to_excel(writer, sheet_name='Raw_Data', index=False)
+        pivot.to_excel(writer, sheet_name='Cost_Pivot', index=False)
+    
+    print(f"Saved Excel: {excel_path}")
+    print(f"Saved Excel: {pivot_excel_path}")
+    print(f"Saved Excel: {excel_combined} (combined)")
 
 
 if __name__ == "__main__":

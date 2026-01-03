@@ -280,6 +280,8 @@ def main() -> None:
     if not all_rows:
         raise RuntimeError("No rows generated")
     out_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    # Save CSV
     with out_path.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(asdict(all_rows[0]).keys()))
         w.writeheader()
@@ -287,6 +289,12 @@ def main() -> None:
             w.writerow(asdict(r))
 
     print(f"\nCSV written to: {out_path}")
+    
+    # Save Excel
+    df = pd.DataFrame([asdict(r) for r in all_rows])
+    excel_path = out_path.with_suffix('.xlsx')
+    df.to_excel(excel_path, index=False, sheet_name='Detailed_Runs')
+    print(f"Excel written to: {excel_path}")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Export clean report-ready tables (wide per-run + summary) from vrptw_detailed_runs.csv."""
+"""Export clean report-ready tables (wide per-run + summary) from vrptw_detailed_runs.csv to both CSV and Excel formats."""
 
 from __future__ import annotations
 
@@ -67,18 +67,43 @@ def main() -> None:
     )
     summary["feasible_rate"] = 100.0 * summary["feasible_rate"]
 
-    wide_cost_path = out_dir / "vrptw_per_run_cost_wide.csv"
-    wide_routes_path = out_dir / "vrptw_per_run_routes_wide.csv"
-    summary_path = out_dir / "vrptw_summary_stats.csv"
+    # CSV paths
+    wide_cost_csv = out_dir / "vrptw_per_run_cost_wide.csv"
+    wide_routes_csv = out_dir / "vrptw_per_run_routes_wide.csv"
+    summary_csv = out_dir / "vrptw_summary_stats.csv"
+    
+    # Excel paths
+    wide_cost_xlsx = out_dir / "vrptw_per_run_cost_wide.xlsx"
+    wide_routes_xlsx = out_dir / "vrptw_per_run_routes_wide.xlsx"
+    summary_xlsx = out_dir / "vrptw_summary_stats.xlsx"
+    excel_combined = out_dir / "vrptw_all_results.xlsx"
 
-    wide_cost.to_csv(wide_cost_path, index=False)
-    wide_routes.to_csv(wide_routes_path, index=False)
-    summary.to_csv(summary_path, index=False)
+    # Save CSV files
+    wide_cost.to_csv(wide_cost_csv, index=False)
+    wide_routes.to_csv(wide_routes_csv, index=False)
+    summary.to_csv(summary_csv, index=False)
+    
+    # Save individual Excel files
+    wide_cost.to_excel(wide_cost_xlsx, index=False, sheet_name="Cost_Per_Run")
+    wide_routes.to_excel(wide_routes_xlsx, index=False, sheet_name="Routes_Per_Run")
+    summary.to_excel(summary_xlsx, index=False, sheet_name="Summary_Stats")
+    
+    # Save combined Excel file with multiple sheets
+    with pd.ExcelWriter(excel_combined, engine='openpyxl') as writer:
+        wide_cost.to_excel(writer, sheet_name='Cost_Per_Run', index=False)
+        wide_routes.to_excel(writer, sheet_name='Routes_Per_Run', index=False)
+        summary.to_excel(writer, sheet_name='Summary_Stats', index=False)
+        df.to_excel(writer, sheet_name='Raw_Data', index=False)
 
-    print("Wrote report tables:")
-    print(f"- {wide_cost_path}")
-    print(f"- {wide_routes_path}")
-    print(f"- {summary_path}")
+    print("Wrote report tables (CSV):")
+    print(f"- {wide_cost_csv}")
+    print(f"- {wide_routes_csv}")
+    print(f"- {summary_csv}")
+    print("\nWrote report tables (Excel):")
+    print(f"- {wide_cost_xlsx}")
+    print(f"- {wide_routes_xlsx}")
+    print(f"- {summary_xlsx}")
+    print(f"- {excel_combined} (combined with all sheets)")
 
 
 if __name__ == "__main__":
