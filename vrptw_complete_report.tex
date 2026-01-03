@@ -978,11 +978,15 @@ The complete source code for this project is available on GitHub at \url{https:/
 
 \textbf{detailed\_runs\_report.py} -- Generates detailed stage-by-stage performance reports with per-run and summary statistics in CSV format.
 
-\textbf{export\_report\_tables.py} -- Exports formatted tables from experimental results for inclusion in research reports.
+\textbf{export\_report\_tables.py} -- Exports formatted tables from experimental results for inclusion in research reports. Converts detailed run data into pivoted wide-format tables (per-run cost, per-run routes) and summary statistics tables with mean, standard deviation, min, max values for each algorithm variant and instance.
 
-\textbf{plot\_detailed\_runs\_figures.py} -- Creates visualization figures including cost distributions, runtime analysis, and route count plots.
+\textbf{stage\_by\_stage\_report.py} -- Generates comprehensive stage-by-stage analysis showing algorithm progression through construction, 2-opt, and relocation phases. Exports results to CSV with detailed metrics for each algorithmic stage.
+
+\textbf{plot\_detailed\_runs\_figures.py} -- Creates visualization figures including cost distributions, runtime analysis, and route count plots from CSV experimental results.
 
 \textbf{generate\_heterogeneous\_tw.py} -- Generates heterogeneous time-window datasets from Solomon C1 instances with varying window widths.
+
+\textbf{duration\_sweep.py} -- Performs sensitivity analysis by sweeping maximum route duration parameters and exports results to CSV format for analysis.
 
 \subsection{Dataset Files}
 
